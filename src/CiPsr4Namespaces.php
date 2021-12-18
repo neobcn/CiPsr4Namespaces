@@ -27,11 +27,11 @@ class CiPsr4Namespaces
         spl_autoload_register([$this, 'cargaClasePHP'], true, true);
 
         // Ahora anteponemos otro cargador, para los ficheros de nuestro mapa de clases.
-        $config = is_array($this->mapaDeClases) ?? [];
+        $config = is_array($this->mapaDeClases) ? $this->mapaDeClases : [];
 
         spl_autoload_register(function ($classe) use ($config) {
             $partes = explode("\\", $classe);
-            $classe = end($parts);
+            $classe = end($partes);
             if (empty($config[$classe])){
                 return false;
             }
@@ -42,21 +42,21 @@ class CiPsr4Namespaces
     private function cargaClasePHP($clase)
     {
         $ficheroMapeado = $this->cargaDesdeNamespaces($clase = str_ireplace('.php', '', trim($clase, '\\')));
-        return $ficheroMapeado ?? $this->cargaDesdeDefaults($clase);
+        return $ficheroMapeado ? $ficheroMapeado : $this->cargaDesdeDefaults($clase);
     }
 
     private function cargaDesdeNamespaces($clase)
     {
-        if (strpos($class, '\\') === false){
+        if (strpos($clase, '\\') === false){
             return false;
         }
 
         foreach ($this->prefijos as $namespace => $directorios){
             foreach ($directorios as $directorio){
-                if (strpos($class, $namespace) === 0){
+                if (strpos($clase, $namespace) === 0){
                     if ($filename = $this->requerirFichero(
                         rtrim($directorio, '/') .
-                        str_replace('\\', '/',substr($class, strlen($namespace))) .
+                        str_replace('\\', '/',substr($clase, strlen($namespace))) .
                         '.php')){
                         return $filename;
                     }
@@ -88,8 +88,6 @@ class CiPsr4Namespaces
 
     private function requerirFichero($fichero)
     {
-        $file = $this->sanitizeFilename($file);
-
         if (is_file($fichero = preg_replace('/[^0-9\p{L}\s\/\-\_\.\:\\\\]/u', '', trim($fichero, '.-_')))) {
             require_once $fichero;
             return $fichero;
