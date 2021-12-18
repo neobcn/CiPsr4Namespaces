@@ -1,5 +1,5 @@
 {
-    "name": "smap/codeigniter-psr4-autoload",
+    "name": "neobcn/codeigniter-psr4-autoload",
     "description": "Funcionalidad namespaces para Codeigniter 3",
     "keywords": ["codeIgniter", "autoload", "PSR-4", "autoloader", "namespaces"],
     "homepage": "https://github.com/neobcn/CiPsr4Namespaces",
