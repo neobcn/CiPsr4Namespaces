@@ -17,7 +17,7 @@
         "classmap": ["src/"],
         "psr-4": {
             "app\\": "../../../",
-            "Neobcn\\": "../../neobcn"
+            "Neobcn\\": "../../../neobcn"
         }
     }
 }
